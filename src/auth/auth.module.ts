@@ -9,7 +9,7 @@ import { AuthController } from './auth.controller';
 
 @Module({
   imports: [
-    UsersModule, 
+    UsersModule,
     PassportModule,
     JwtModule.register({
       secret: jwtConstants.secret,
@@ -20,4 +20,4 @@ import { AuthController } from './auth.controller';
   providers: [AuthService, JwtStrategy,],
   exports: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule { }

@@ -9,7 +9,7 @@ import { Employee } from "../employee/employee.entity"
 
 @Module({
   imports: [
-    AuthModule, 
+    AuthModule,
     UsersModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -25,4 +25,4 @@ import { Employee } from "../employee/employee.entity"
   ],
   controllers: [AppController],
 })
-export class AppModule {}
+export class AppModule { }

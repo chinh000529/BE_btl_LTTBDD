@@ -22,23 +22,10 @@ export class CreateEmployeeDto {
 }
 
 export class UpdateEmployeeDto {
-    @IsString()
-    @MaxLength(30)
     name?: string;
-
-    @IsString()
     phone?: string;
-
-    @IsString()
-    @MaxLength(50)
     address?: string;
-
-    @IsString()
-    @IsEmail()
     email?: string;
-
-    @IsNotEmpty()
-    @IsInt()
     accountId?: number;
 }
 

@@ -17,18 +17,10 @@ export class CreateUserDto {
     role: string;
 }
 export class UpdateUserDto {
-    @IsNotEmpty()
-    @IsString()
-    @MaxLength(20)
     username?: string;
 
-    @IsNotEmpty()
-    @Length(8, 20)
-    @IsString()
     password?: string;
 
-    @IsNotEmpty()
-    @IsString()
     role?: string;
 }
 export class UserResponse {

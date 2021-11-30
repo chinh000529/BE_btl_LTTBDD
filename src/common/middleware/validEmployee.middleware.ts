@@ -9,13 +9,13 @@ export class ValidEmployeeMiddleware implements NestMiddleware {
     constructor(
         @InjectRepository(Employee)
         private employeeRepository: Repository<Employee>,
-    ) {}
+    ) { }
 
     async use(req: Request, res: Response, next: NextFunction) {
         const employeeId = parseInt(req.params.employeeId);
-        const employeeExists = this.employeeRepository.findOne({id: employeeId});
-        if(!employeeExists) {
-            throw new HttpException("Not found employee",400);
+        const employeeExists = this.employeeRepository.findOne({ id: employeeId });
+        if (!employeeExists) {
+            throw new HttpException("Not found employee", 400);
         }
         next();
     }

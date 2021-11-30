@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, Request, Query, UseInterceptors, ClassSerializerInterceptor} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, Request, Query, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateUserDto, UpdateUserDto, UserResponse } from './dto/user.dto';
@@ -8,15 +8,15 @@ import { UserService } from './user.service';
 export class UsersController {
     constructor(
         private userService: UserService,
-    ) {}
+    ) { }
 
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(ClassSerializerInterceptor)
     @Get()
-    async getAllUser(
+    getAllUser(
         @Query('page') page: number,
     ): Promise<UserResponse[]> {
-        return await this.userService.getAllUser(page);
+        return this.userService.getAllUsers(page);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -27,10 +27,10 @@ export class UsersController {
     ): Promise<UserResponse> {
         return new UserResponse(await this.userService.getUserById(userId));
     }
-    
+
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(ClassSerializerInterceptor)
-    @Post('/create')
+    @Post()
     async createUser(
         @Body() body: CreateUserDto,
     ): Promise<UserResponse> {
@@ -47,7 +47,7 @@ export class UsersController {
     ): Promise<UserResponse> {
         return new UserResponse(await this.userService.updateUser(userId, body, req.user.role, req.user.id));
     }
-    
+
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(ClassSerializerInterceptor)
     @Delete('/:userId')
