@@ -1,4 +1,4 @@
-import { HttpException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { NotFoundException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from "@nestjs/typeorm";
 import { Like, Repository } from 'typeorm';
 import { Employee } from './employee.entity';
@@ -39,7 +39,7 @@ export class EmployeeService {
         if (role.toLocaleLowerCase() === AuthEnum.ADMIN) {
             const employeeFound = await this.employeesRepository.findOne({ id: employeeId });
             if (!employeeFound) {
-                throw new HttpException("Not found Employee!!", 400);
+                throw new NotFoundException("Not found Employee!!");
             }
             Object.assign(employeeFound, payload);
             return await this.employeesRepository.save(employeeFound);
@@ -47,7 +47,7 @@ export class EmployeeService {
         if (role.toLocaleLowerCase() === AuthEnum.EMPLOYEE) {
             const employeeFound = await this.employeesRepository.findOne({ id: employeeId });
             if (!employeeFound) {
-                throw new HttpException("Not found Employee!!", 400);
+                throw new NotFoundException("Not found Employee!!");
             }
             if (employeeFound.accountId === accountId) {
                 Object.assign(employeeFound, payload);
