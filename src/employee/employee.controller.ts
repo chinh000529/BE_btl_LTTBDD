@@ -25,8 +25,8 @@ export class EmployeeController {
         return this.employeeService.getEmployeesByName(name);
     }
 
-    @Post('/create')
     @UseGuards(JwtAuthGuard)
+    @Post('/create')
     createEmployee(
         @Body() body: CreateEmployeeDto,
         @Request() req,
@@ -34,8 +34,8 @@ export class EmployeeController {
         return this.employeeService.createEmployee(body, req.user.role);
     }
 
-    @Put('/:employeeId')
     @UseGuards(JwtAuthGuard)
+    @Put('/:employeeId')
     updateEmployee(
         @Param('employeeId') employeeId: number,
         @Body() body: UpdateEmployeeDto,
@@ -44,8 +44,8 @@ export class EmployeeController {
         return this.employeeService.updateEmployee(employeeId, body, req.user.role, req.user.id);
     }
 
-    @Delete('/:employeeId')
     @UseGuards(JwtAuthGuard)
+    @Delete('/:employeeId')
     deleteEmployee(
         @Param('employeeId') employeeId: number,
         @Request() req,

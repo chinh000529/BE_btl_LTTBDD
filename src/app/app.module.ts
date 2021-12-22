@@ -9,18 +9,18 @@ import { Employee } from "../employee/employee.entity"
 
 @Module({
   imports: [
-    AuthModule,
-    UsersModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: '123',
+      password: '123456',
       database: 'bai2',
       entities: [User, Employee],
       synchronize: true,
     }),
+    AuthModule,
+    UsersModule,
     EmployeeModule,
   ],
   controllers: [AppController],

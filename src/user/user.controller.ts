@@ -1,5 +1,4 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, Request, Query, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
-import { AuthService } from 'src/auth/auth.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateUserDto, UpdateUserDto, UserResponse } from './dto/user.dto';
 import { UserService } from './user.service';
