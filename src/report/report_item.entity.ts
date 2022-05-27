@@ -1,22 +1,16 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class Employee {
+export class ReportItem {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
-    name: string;
+    question_id: number;
 
     @Column()
-    phone: string;
+    report_id: number;
 
     @Column()
-    address: string;
-
-    @Column()
-    email: string;
-
-    @Column()
-    accountId: number;
+    answer: number;
 }

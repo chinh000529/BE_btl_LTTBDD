@@ -4,8 +4,9 @@ import { AuthModule } from '../auth/auth.module';
 import { UsersModule } from '../user/user.module';
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { User } from '../user/user.entity';
-import { EmployeeModule } from '../employee/employee.module';
-import { Employee } from "../employee/employee.entity"
+import { Report } from '../report/report.entity';
+import { ReportItem } from '../report/report_item.entity';
+import { ReportModule } from 'src/report/report.module';
 
 @Module({
   imports: [
@@ -16,12 +17,12 @@ import { Employee } from "../employee/employee.entity"
       username: 'root',
       password: '123456',
       database: 'bai2',
-      entities: [User, Employee],
-      synchronize: true,
+      entities: [User, Report, ReportItem],
+      synchronize: false,
     }),
     AuthModule,
     UsersModule,
-    EmployeeModule,
+    ReportModule,
   ],
   controllers: [AppController],
 })

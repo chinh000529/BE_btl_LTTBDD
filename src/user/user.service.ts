@@ -1,19 +1,15 @@
-import { HttpException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { User } from './user.entity';
-import { CreateUserDto, UpdateUserDto } from "./dto/user.dto"
-import { UserResponse } from "./dto/user.dto"
-import { AuthEnum } from "../auth/auth.enum"
+import { Injectable } from '@nestjs/common';
+import { UpdateRespone, UpdateUserRequest, UserByStatusRequest, UserResponse } from "./dto/user.dto"
+import { UserRepository } from './user.repository';
+
 @Injectable()
 export class UserService {
 
   constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    private usersRepository: UserRepository,
   ) { }
 
-  async findByUsername(username: string): Promise<User | undefined> {
+  async findByUsername(username: string): Promise<UserResponse | undefined> {
     return await this.usersRepository.findOne({ username: username });
   }
 
@@ -23,42 +19,32 @@ export class UserService {
     return await this.usersRepository.createQueryBuilder("user").skip(start).take(perPage).getMany();
   }
 
-  async getUserById(userId: number): Promise<UserResponse> {
-    const userFound = await this.usersRepository.findOne({ id: userId });
-    if (!userFound) {
-      throw new NotFoundException("Not found user");
+  async updateUser(body: UpdateUserRequest) {
+    const userCurr = this.usersRepository.findOne({ username: body.username});
+    if(!userCurr) {
+      return UpdateRespone(404, "User not found!!!");
     }
-    return userFound;
+    const userUpdate = {
+      ...userCurr,
+      ...body
+    }
+    await this.usersRepository.save(userUpdate);
+    return UpdateRespone(200, "Update succesful!!!")
   }
 
-  async createUser(payload: CreateUserDto): Promise<UserResponse> {
-    const newUser = this.usersRepository.create(payload);
-    return await this.usersRepository.save(newUser);
-  }
+  async getUserByStatus(status: number, date: string, username: string) {
+    let dateReportFrom = new Date(new Date().setHours(0, 0, 0, 0))
+    let dateReportTo = new Date(new Date().setHours(23, 59, 59, 99))
+    if(date && date !== "null") {
+      dateReportFrom = new Date(new Date(date).setHours(0, 0, 0, 0))
+      dateReportTo = new Date(new Date(date).setHours(23, 59, 59, 99))
+    }
 
-  async updateUser(userId: number, payload: UpdateUserDto, role: string, accountId: number): Promise<UserResponse> {
-    if (
-      (role.toLocaleLowerCase() !== AuthEnum.ADMIN) &&
-      (role.toLocaleLowerCase() !== AuthEnum.EMPLOYEE || userId != accountId)
-    ) {
-      throw new UnauthorizedException("You do not have this right!!!");
-    }
-    const userFound = await this.usersRepository.findOne({ id: userId });
-    if (!userFound) {
-      throw new NotFoundException("Not found user");
-    }
-    Object.assign(userFound, payload);
-    return await this.usersRepository.save(userFound);
-  }
-
-  async deleteUser(userId: number, role: string): Promise<UserResponse> {
-    if (role.toLocaleLowerCase() !== AuthEnum.ADMIN) {
-      throw new UnauthorizedException("You do not have this right!!!");
-    }
-    const userFound = await this.usersRepository.findOne({ id: userId });
-    if (!userFound) {
-      throw new NotFoundException("Not found user");
-    }
-    return await this.usersRepository.remove(userFound);
+    return await this.usersRepository.getUserByStatus({
+        username: username,
+        status: status,
+        dateReportFrom: dateReportFrom,
+        dateReportTo: dateReportTo
+    });
   }
 }
